@@ -1,6 +1,8 @@
 import * as THREE from "three"
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js'
 import GUI from "lil-gui"
+import testVertexShader from './shaders/test/vertex.glsl'
+import testFragmentShader from './shaders/test/fragment.glsl'
 
 /**
  * Base
@@ -21,13 +23,21 @@ const scene = new THREE.Scene()
 const textureLoader = new THREE.TextureLoader()
 
 /**
- * Test cube
+ * Test mesh
  */
-const cube = new THREE.Mesh(
-  new THREE.BoxGeometry(1, 1, 1),
-  new THREE.MeshBasicMaterial()
-)
-scene.add(cube)
+// Geometry
+const geometry = new THREE.PlaneGeometry(1, 1, 32, 32)
+
+// Material
+const material = new THREE.ShaderMaterial({
+  vertexShader: testVertexShader,
+  fragmentShader: testFragmentShader,
+  side: THREE.DoubleSide
+})
+
+// Mesh
+const mesh = new THREE.Mesh(geometry, material)
+scene.add(mesh)
 
 /**
  * Sizes
@@ -77,7 +87,7 @@ window.addEventListener('dblclick', () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(75, sizes.width / sizes.height, 0.1, 100)
-camera.position.z = 3
+camera.position.set(0.25, - 0.25, 1)
 scene.add(camera)
 
 // Controls
